@@ -361,7 +361,7 @@ class _Parser:
     match = re.match(r'^[\s,]*([^\s,]+)[\s,]+([^\s,]+)[\s,]+([^\s,]+)[\s,]+([^\s,]+)[\s,]*$', _attr(node, 'viewBox'))
     if match:
       aspect = _attr(node, 'preserveAspectRatio') or 'xMidYMid'
-      x, y, w, h = map(_units, match.groups())
+      x, y, w, h = list(map(_units, match.groups()))
       data.setdefault('width', w)
       data.setdefault('height', h)
       sx = data['width'] / w
@@ -547,12 +547,12 @@ def _points(text):
 def _matrix(text):
   match = re.match(r'matrix\s*\(\s*([^,\s]*)[,\s]+([^,\s]*)[,\s]+([^,\s]*)[,\s]+([^,\s]*)[,\s]+([^,\s]*)[,\s]+([^,\s]*)\s*\)', text)
   if match:
-    numbers = map(float, list(match.groups()))
+    numbers = list(map(float, list(match.groups())))
     return _Matrix(numbers[0], numbers[2], numbers[4], numbers[1], numbers[3], numbers[5])
 
   match = re.match(r'translate\s*\(\s*([^,\s]*)[,\s]+([^,\s]*)\s*\)', text)
   if match:
-    numbers = map(float, list(match.groups()))
+    numbers = list(map(float, list(match.groups())))
     return _Matrix(1, 0, numbers[0], 0, 1, numbers[1])
 
   raise Exception('Unsupported transform syntax: %s' % repr(text))
